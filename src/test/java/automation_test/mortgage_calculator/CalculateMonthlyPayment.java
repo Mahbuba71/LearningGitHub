@@ -88,7 +88,7 @@ public class CalculateMonthlyPayment {
 
     @Test
 
-    public void calculalteMonthlyPayment() {
+    public void calculateMonthlyPayment() {
         enterData();
 
         //Click on Calculate button

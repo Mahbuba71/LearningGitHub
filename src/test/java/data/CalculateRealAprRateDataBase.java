@@ -1,33 +1,11 @@
 package data;
 
-import command_providers.ActOn;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import automation_test.BaseUIClass;
 import org.testng.annotations.Test;
 import page_objects.Home;
-import utilities.ReadConfigFiles;
-import utilities.ScreenCapture;
 
-public class CalculateRealAprRateDataBase {
 
-    private static final Logger LOGGER = LogManager.getLogger(CalculateRealAprRateDataBase.class);
-    WebDriver driver;
-
-    @BeforeMethod
-
-    public void openBrowser(){
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        LOGGER.info("---------------Test Name: Calculate Real APR---------------");
-        String browserUrl = ReadConfigFiles.getPropertyValues("Url");
-        ActOn.browser(driver).openBrowser(browserUrl);
-    }
+public class CalculateRealAprRateDataBase extends BaseUIClass {
 
     @Test(dataProvider = "RealAprRates", dataProviderClass = DataStore.class)
     public void calculateRealApr(String homePrice, String downPayment, String interestRate, String expectedApr){
@@ -42,14 +20,6 @@ public class CalculateRealAprRateDataBase {
                 .typeInterestRate(interestRate)
                 .clickOnCalculateButton()
                 .validateRealAprRate(expectedApr);
-    }
-    @AfterMethod
-    public void closeBrowser(ITestResult result){
-        if (ITestResult.FAILURE == result.getStatus()){
-            ScreenCapture.getScreenShot(driver);
-        }
-        ActOn.browser(driver).closeBrowser();
-        LOGGER.info("----End Test Case: Calculate Real APR-----");
     }
 }
 
